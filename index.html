@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>To-Do List Manager</title>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List Manager</h1>
+        <input type="text" id="taskInput" placeholder="Enter a new task">
+        <button id="addTaskBtn">Add Task</button>
+        <ul id="tacheListe"></ul>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById("addTaskBtn").addEventListener("click", addTask);
+
+        function addTask() {
+            const taskInput = document.getElementById("taskInput");
+            const tacheListe = document.getElementById("tacheListe");
+
+            if (taskInput.value.trim() === "") {
+                alert("Please enter a task");
+                return;
+            }
+
+            const newTask = document.createElement("li");
+            newTask.textContent = taskInput.value;
+
+            const cnt = document.createElement("div");
+            const completeBtn = document.createElement("button");
+            completeBtn.textContent = "Complete";
+            completeBtn.classList.add("completeBtn");
+            completeBtn.addEventListener("click", completeTask);
+            cnt.appendChild(completeBtn);
+            
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.addEventListener("click", deleteTask);
+            cnt.appendChild(deleteBtn);
+            
+            newTask.appendChild(cnt);
+            tacheListe.appendChild(newTask);
+            taskInput.value = "";
+            checkCompletionStatus();
+        }
+
+        function completeTask(event) {
+            const taskToComplete = event.target.parentElement.parentElement;
+            taskToComplete.classList.toggle("completed");
+            checkCompletionStatus();
+        }
+
+        function deleteTask(event) {
+            const taskToDelete = event.target.parentElement.parentElement;
+            taskToDelete.remove();
+            checkCompletionStatus();
+        }
+
+        function checkCompletionStatus() {
+            const tacheListe = document.getElementById("tacheListe");
+            const message = document.getElementById("message");
+            const totaleTache = tacheListe.childElementCount;
+            const tacheComplet = tacheListe.querySelectorAll(".completed").length;
+            const tacheRestante = totaleTache - tacheComplet;
+
+            if (tacheRestante == 0 && totaleTache > 0) {
+                message.textContent = "vous avez completer tout les tache!";
+                alert("vous avez completer tout les tache!")
+            } else if (tacheRestante === 1) {
+                message.textContent = "tu es proche! une seule tâche restante!";
+            } else {
+                message.textContent = "";
+            }
+        }
+
+    </script>
+</body>
+</html>
